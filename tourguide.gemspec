@@ -9,10 +9,6 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Adam Carlile"]
   spec.email         = ["adam@benchmedia.co.uk"]
 
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com' to prevent pushes to rubygems.org, or delete to allow pushes to any server."
-  end
-
   spec.summary       = "Tourbus"
   spec.description   = "Tourbus"
   spec.homepage      = "http://www.github.com/boardiq/tourbus"
