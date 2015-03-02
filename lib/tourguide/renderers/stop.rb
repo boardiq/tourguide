@@ -3,6 +3,7 @@ module Tourguide
     class Stop
 
       attr_reader :options
+      attr_writer :count, :total
 
       def initialize(context, options={})
         @context = context
@@ -27,10 +28,22 @@ module Tourguide
       end
 
       def render
-        @context.content_tag(:li, [close.render, @content, connections.render].join("\n").html_safe, li_options).html_safe
+        @context.content_tag(:li, rendered_content, li_options).html_safe
+      end
+
+      def progress
+        @progress ||= Tourguide::Renderers::Progress.new(@context, @count, @total)
       end
 
       private
+
+        def rendered_content
+          [close.render, @content, progress_content, connections.render].compact.join("\n").html_safe
+        end
+
+        def progress_content
+          @context.content_tag(:ol, progress.render, class: 'progress-list') unless progress.uncountable?
+        end
 
         def li_options
           {
@@ -39,7 +52,7 @@ module Tourguide
         end
 
         def data_options
-          options.except(:wrapper, :close).reject { |k, v| v.blank? }
+          options.except(:wrapper, :close, :counter).reject { |k, v| v.blank? }
         end
 
         def default_options

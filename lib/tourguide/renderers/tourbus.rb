@@ -17,11 +17,19 @@ module Tourguide
         stops << renderer
       end
 
+      def group(options={}, &block)
+        renderer = Tourguide::Renderers::Group.new(@context, options)
+        yield(renderer) if block_given?
+        stops << renderer
+      end
+
+
       def render
         xhtml = Builder::XmlMarkup.new target: out=(''), indent: 2
         xhtml.ul(ul_options) do |ul|
           ul << stops.map { |x| x.render }.join("\n")
         end
+        xhtml.div class: 'tour-overlay'
         out.html_safe
       end
 
@@ -44,7 +52,7 @@ module Tourguide
         def default_options
           {}
         end
-
+        
     end
   end
 end
